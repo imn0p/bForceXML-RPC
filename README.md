@@ -14,7 +14,7 @@ pip install -r requirements
 ./bForceXML-RPC.py <args>
 * -u URL Target: The url to xmlrpc.php file
 * -t Threads: Number of threads that'll be running
-* -s User: User fou want to bruteforce
+* -s User: User you want to bruteforce
 * -w Wordlist: Passwords dictionary path
 * -h Help: show the help panel
 
