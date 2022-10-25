@@ -2,7 +2,7 @@
  Bruteforcing tool for WordPress's XMLRPC.php
 
 
-###Installation
+### Installation
 ```bash
 git clone https://github.com/imn0p/bForceXML-RPC.git
 cd bForceXML-RPC
@@ -10,7 +10,7 @@ pip install -r requirements
 ```
 
 
-###Usage
+### Usage
 ./bForceXML-RPC.py <args>
 * -u URL Target: The url to xmlrpc.php file
 * -t Threads: Number of threads that'll be running
