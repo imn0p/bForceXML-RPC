@@ -42,7 +42,12 @@ def vulnCheck():
         print("Target is not vulnerable to wp.getUsersBlogs method bruteforcing")
         exit(0)
 
-
+def loadinto(wordlist, words, prg):
+    for word in wordlist:
+        word = word.rstrip()
+        words.put(word)
+        prg.status(str(words.qsize()))
+    prg.success()
 
 def dictLoad(dictionary):
     try:
@@ -54,11 +59,8 @@ def dictLoad(dictionary):
         wordlist=wordlistcon.readlines()
         words=queue.Queue()
         p2=log.progress("Cargando diccionario: ")
-    for word in wordlist:
-        word=word.rstrip()
-        words.put(word)
-        p2.status(str(words.qsize()))
-    p2.success()
+    threading.Thread(target=loadinto, args=(wordlist, words, p2)).start()
+    #    loadinto(wordlist, words, p2)
     return words
 
 
